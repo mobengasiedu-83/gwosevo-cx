@@ -1,0 +1,55 @@
+name: Application checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: testing
+          MYSQL_DATABASE: gwosevo_test
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -ptesting"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=5s --health-timeout=3s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo_mysql, pdo_sqlite, redis, pcntl, bcmath
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: composer install --prefer-dist --no-interaction
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: vendor/bin/pint --test app routes database tests
+      - run: php artisan test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Verify MySQL migrations and Redis
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_DATABASE: gwosevo_test
+          DB_USERNAME: root
+          DB_PASSWORD: testing
+        run: |
+          php artisan migrate --force
+          php artisan contact-center:sync-roles
+          php artisan contact-center:check-infrastructure
