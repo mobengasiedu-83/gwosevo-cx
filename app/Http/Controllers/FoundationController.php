@@ -101,6 +101,31 @@ class FoundationController extends Controller
         return response()->noContent();
     }
 
+    /**
+     * Activate or deactivate an account without editing its full profile. The
+     * same safety rules as the editor apply: you cannot disable yourself and
+     * the tenant always keeps one active superadmin.
+     */
+    public function userStatus(Request $request, string $id)
+    {
+        $tenant = $this->tenant($request);
+        $data = $request->validate(['active' => ['required', 'boolean']]);
+        $user = User::where('tenant_id', $tenant)->findOrFail($id);
+        if ($user->hasRole('Super Admin')) {
+            abort_unless($request->user()->hasRole('Super Admin'), 403);
+        }
+        abort_if($user->id === $request->user()->id && ! $data['active'], 422, 'You cannot disable your own account.');
+        if ($user->hasRole('Super Admin') && ! $data['active']) {
+            abort_unless(User::where('tenant_id', $tenant)->where('active', true)->whereKeyNot($user->id)->role('Super Admin')->exists(), 422, 'Keep at least one active superadmin.');
+        }
+        $before = $this->summary($user);
+        // Bumping the version ends any session the account still holds.
+        $user->forceFill(['active' => $data['active'], 'auth_version' => $user->auth_version + 1])->save();
+        Audit::record($request->user(), $data['active'] ? 'activate' : 'deactivate', 'users', (string) $user->id, ['before' => $before, 'after' => $this->summary($user->fresh())]);
+
+        return response()->json($this->summary($user->fresh()));
+    }
+
     public function roles(Request $request)
     {
         $tenant = $this->tenant($request);

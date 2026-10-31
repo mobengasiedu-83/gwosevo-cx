@@ -1,0 +1,1516 @@
+{
+  "admin": [
+    {
+      "title": "Dashboard & Monitoring",
+      "items": [
+        {
+          "id": "executive-dashboard",
+          "title": "Executive Dashboard"
+        },
+        {
+          "id": "pbx-dashboard",
+          "title": "PBX Dashboard"
+        },
+        {
+          "id": "real-time-call-dashboard",
+          "title": "Real-Time Call Dashboard"
+        },
+        {
+          "id": "call-center-dashboard",
+          "title": "Call Center Dashboard"
+        },
+        {
+          "id": "agent-performance-dashboard",
+          "title": "Agent Performance Dashboard"
+        },
+        {
+          "id": "ai-performance-dashboard",
+          "title": "AI Performance Dashboard"
+        },
+        {
+          "id": "trunk-network-dashboard",
+          "title": "Trunk & Network Dashboard"
+        },
+        {
+          "id": "system-health-dashboard",
+          "title": "System Health Dashboard"
+        },
+        {
+          "id": "alerts-notifications",
+          "title": "Alerts & Notifications"
+        }
+      ],
+      "id": "dashboards",
+      "section": "Overview"
+    },
+    {
+      "title": "Extensions & Devices",
+      "items": [
+        {
+          "id": "extension-management",
+          "title": "Extension Management",
+          "resource": "extensions"
+        },
+        {
+          "id": "extension-status",
+          "title": "Extension Status"
+        },
+        {
+          "id": "hot-desking",
+          "title": "Hot Desking"
+        },
+        {
+          "id": "sip-pjsip-devices",
+          "title": "SIP / PJSIP Devices"
+        },
+        {
+          "id": "iax2-devices",
+          "title": "IAX2 Devices"
+        },
+        {
+          "id": "webrtc-extensions",
+          "title": "WebRTC Extensions"
+        },
+        {
+          "id": "softphone-provisioning",
+          "title": "Softphone Provisioning"
+        },
+        {
+          "id": "device-provisioning",
+          "title": "Device Provisioning"
+        },
+        {
+          "id": "import-export-extensions",
+          "title": "Import / Export Extensions"
+        },
+        {
+          "id": "bulk-extension-modification",
+          "title": "Bulk Extension Modification"
+        },
+        {
+          "id": "extension-templates",
+          "title": "Extension Templates"
+        },
+        {
+          "id": "registration-monitoring",
+          "title": "Registration Monitoring"
+        }
+      ],
+      "id": "extensions",
+      "section": "PBX & Telephony"
+    },
+    {
+      "title": "Call Routing & Trunks",
+      "items": [
+        {
+          "id": "trunk-management",
+          "title": "Trunk Management"
+        },
+        {
+          "id": "sip-pjsip-trunks",
+          "title": "SIP / PJSIP Trunks"
+        },
+        {
+          "id": "inbound-routes",
+          "title": "Inbound Routes"
+        },
+        {
+          "id": "outbound-routes",
+          "title": "Outbound Routes"
+        },
+        {
+          "id": "dynamic-routing",
+          "title": "Dynamic Routing"
+        },
+        {
+          "id": "intelligent-routing",
+          "title": "Intelligent Routing"
+        },
+        {
+          "id": "routing-rules-priorities",
+          "title": "Routing Rules & Priorities",
+          "resource": "routing-profiles"
+        },
+        {
+          "id": "caller-id-routing",
+          "title": "Caller ID Routing"
+        },
+        {
+          "id": "did-ddi-management",
+          "title": "DID / DDI Management"
+        },
+        {
+          "id": "number-normalisation",
+          "title": "Number Normalisation"
+        },
+        {
+          "id": "failover-backup-routes",
+          "title": "Failover & Backup Routes"
+        },
+        {
+          "id": "route-testing",
+          "title": "Route Testing"
+        }
+      ],
+      "id": "routing",
+      "section": "PBX & Telephony"
+    },
+    {
+      "title": "IVR & Incoming Call Tools",
+      "items": [
+        {
+          "id": "ivr-management",
+          "title": "IVR Management"
+        },
+        {
+          "id": "visual-drag-and-drop-ivr-builder",
+          "title": "Visual Drag-and-Drop IVR Builder"
+        },
+        {
+          "id": "ai-conversational-ivr",
+          "title": "AI Conversational IVR"
+        },
+        {
+          "id": "time-groups",
+          "title": "Time Groups"
+        },
+        {
+          "id": "time-conditions",
+          "title": "Time Conditions"
+        },
+        {
+          "id": "business-hours-holidays",
+          "title": "Business Hours & Holidays",
+          "resource": "business-hours"
+        },
+        {
+          "id": "announcements",
+          "title": "Announcements"
+        },
+        {
+          "id": "languages",
+          "title": "Languages"
+        },
+        {
+          "id": "night-mode",
+          "title": "Night Mode"
+        },
+        {
+          "id": "caller-id-modifiers",
+          "title": "Caller ID Modifiers"
+        },
+        {
+          "id": "caller-id-lookup",
+          "title": "Caller ID Lookup"
+        },
+        {
+          "id": "custom-destinations",
+          "title": "Custom Destinations"
+        },
+        {
+          "id": "custom-applications",
+          "title": "Custom Applications"
+        },
+        {
+          "id": "call-flow-simulator",
+          "title": "Call Flow Simulator"
+        },
+        {
+          "id": "ivr-versions-publishing",
+          "title": "IVR Versions & Publishing"
+        }
+      ],
+      "id": "ivr",
+      "section": "PBX & Telephony"
+    },
+    {
+      "title": "Call Center Management",
+      "items": [
+        {
+          "id": "ring-groups",
+          "title": "Ring Groups"
+        },
+        {
+          "id": "call-queues",
+          "title": "Call Queues",
+          "resource": "queues"
+        },
+        {
+          "id": "queue-members",
+          "title": "Queue Members",
+          "resource": "queues"
+        },
+        {
+          "id": "queue-strategies",
+          "title": "Queue Strategies",
+          "resource": "routing-profiles"
+        },
+        {
+          "id": "queue-priorities",
+          "title": "Queue Priorities",
+          "resource": "queues"
+        },
+        {
+          "id": "queue-vips",
+          "title": "Queue VIPs"
+        },
+        {
+          "id": "queue-callback",
+          "title": "Queue Callback"
+        },
+        {
+          "id": "skills-based-routing",
+          "title": "Skills-Based Routing",
+          "resource": "skills"
+        },
+        {
+          "id": "agent-management",
+          "title": "Agent Management",
+          "resource": "agents"
+        },
+        {
+          "id": "agent-groups-teams",
+          "title": "Agent Groups & Teams",
+          "resource": "teams"
+        },
+        {
+          "id": "agent-login-logout",
+          "title": "Agent Login / Logout"
+        },
+        {
+          "id": "agent-break-codes",
+          "title": "Agent Break Codes"
+        },
+        {
+          "id": "disposition-codes",
+          "title": "Disposition Codes"
+        },
+        {
+          "id": "call-wrap-up",
+          "title": "Call Wrap-Up"
+        },
+        {
+          "id": "queue-sla-policies",
+          "title": "Queue SLA Policies"
+        },
+        {
+          "id": "overflow-escalation",
+          "title": "Overflow & Escalation"
+        },
+        {
+          "id": "wallboards",
+          "title": "Wallboards"
+        }
+      ],
+      "id": "contact-center",
+      "section": "Contact Center"
+    },
+    {
+      "title": "AI Contact Center",
+      "items": [
+        {
+          "id": "ai-answering-service",
+          "title": "AI Answering Service"
+        },
+        {
+          "id": "ai-voice-agents",
+          "title": "AI Voice Agents"
+        },
+        {
+          "id": "ai-agent-builder",
+          "title": "AI Agent Builder"
+        },
+        {
+          "id": "ai-knowledge-base",
+          "title": "AI Knowledge Base"
+        },
+        {
+          "id": "ai-conversation-flows",
+          "title": "AI Conversation Flows"
+        },
+        {
+          "id": "ai-intent-recognition",
+          "title": "AI Intent Recognition"
+        },
+        {
+          "id": "speech-to-text",
+          "title": "Speech-to-Text"
+        },
+        {
+          "id": "text-to-speech",
+          "title": "Text-to-Speech"
+        },
+        {
+          "id": "ai-language-configuration",
+          "title": "AI Language Configuration"
+        },
+        {
+          "id": "ai-call-summaries",
+          "title": "AI Call Summaries"
+        },
+        {
+          "id": "ai-sentiment-analysis",
+          "title": "AI Sentiment Analysis"
+        },
+        {
+          "id": "ai-quality-assurance",
+          "title": "AI Quality Assurance"
+        },
+        {
+          "id": "ai-call-classification",
+          "title": "AI Call Classification"
+        },
+        {
+          "id": "ai-to-human-handoff",
+          "title": "AI-to-Human Handoff"
+        },
+        {
+          "id": "ai-routing-rules",
+          "title": "AI Routing Rules"
+        },
+        {
+          "id": "ai-usage-cost-monitoring",
+          "title": "AI Usage & Cost Monitoring"
+        },
+        {
+          "id": "ai-testing-evaluation",
+          "title": "AI Testing & Evaluation"
+        }
+      ],
+      "id": "ai",
+      "section": "Contact Center"
+    },
+    {
+      "title": "Telephony Applications",
+      "items": [
+        {
+          "id": "audio-conferences",
+          "title": "Audio Conferences"
+        },
+        {
+          "id": "video-conferences",
+          "title": "Video Conferences"
+        },
+        {
+          "id": "paging-intercom",
+          "title": "Paging & Intercom"
+        },
+        {
+          "id": "pickup-groups",
+          "title": "Pickup Groups"
+        },
+        {
+          "id": "call-parking",
+          "title": "Call Parking"
+        },
+        {
+          "id": "speed-dialing",
+          "title": "Speed Dialing"
+        },
+        {
+          "id": "import-export-speed-dialing",
+          "title": "Import / Export Speed Dialing"
+        },
+        {
+          "id": "voicemail",
+          "title": "Voicemail"
+        },
+        {
+          "id": "voicemail-broadcast-groups",
+          "title": "Voicemail Broadcast Groups"
+        },
+        {
+          "id": "call-back",
+          "title": "Call Back"
+        },
+        {
+          "id": "disa",
+          "title": "DISA"
+        },
+        {
+          "id": "pin-lists",
+          "title": "PIN Lists"
+        },
+        {
+          "id": "feature-codes",
+          "title": "Feature Codes"
+        },
+        {
+          "id": "call-recording",
+          "title": "Call Recording"
+        },
+        {
+          "id": "music-on-hold",
+          "title": "Music on Hold"
+        },
+        {
+          "id": "call-transfer-rules",
+          "title": "Call Transfer Rules"
+        }
+      ],
+      "id": "applications",
+      "section": "PBX & Telephony"
+    },
+    {
+      "title": "Class of Service & Policies",
+      "items": [
+        {
+          "id": "class-of-service",
+          "title": "Class of Service"
+        },
+        {
+          "id": "feature-categories",
+          "title": "Feature Categories"
+        },
+        {
+          "id": "dialing-restriction-rules",
+          "title": "Dialing Restriction Rules"
+        },
+        {
+          "id": "customer-codes",
+          "title": "Customer Codes"
+        },
+        {
+          "id": "authorization-codes",
+          "title": "Authorization Codes"
+        },
+        {
+          "id": "route-selections",
+          "title": "Route Selections"
+        },
+        {
+          "id": "extension-permissions",
+          "title": "Extension Permissions"
+        },
+        {
+          "id": "call-limits",
+          "title": "Call Limits"
+        },
+        {
+          "id": "concurrent-call-policies",
+          "title": "Concurrent Call Policies"
+        },
+        {
+          "id": "international-dialing-policies",
+          "title": "International Dialing Policies"
+        },
+        {
+          "id": "fraud-prevention-rules",
+          "title": "Fraud Prevention Rules"
+        }
+      ],
+      "id": "policies",
+      "section": "PBX & Telephony"
+    },
+    {
+      "title": "Omnichannel & CRM",
+      "items": [
+        {
+          "id": "unified-inbox",
+          "title": "Unified Inbox"
+        },
+        {
+          "id": "voice-interactions",
+          "title": "Voice Interactions"
+        },
+        {
+          "id": "email-channels",
+          "title": "Email Channels"
+        },
+        {
+          "id": "sms-channels",
+          "title": "SMS Channels"
+        },
+        {
+          "id": "whatsapp-integration",
+          "title": "WhatsApp Integration"
+        },
+        {
+          "id": "web-chat",
+          "title": "Web Chat"
+        },
+        {
+          "id": "customer-profiles",
+          "title": "Customer Profiles"
+        },
+        {
+          "id": "contact-directory",
+          "title": "Contact Directory"
+        },
+        {
+          "id": "interaction-history",
+          "title": "Interaction History"
+        },
+        {
+          "id": "crm-integration",
+          "title": "CRM Integration"
+        },
+        {
+          "id": "cti-screen-pop",
+          "title": "CTI / Screen Pop"
+        },
+        {
+          "id": "click-to-call",
+          "title": "Click-to-Call"
+        },
+        {
+          "id": "customer-journey",
+          "title": "Customer Journey"
+        },
+        {
+          "id": "tickets-cases",
+          "title": "Tickets & Cases"
+        },
+        {
+          "id": "follow-up-activities",
+          "title": "Follow-Up Activities"
+        },
+        {
+          "id": "disposition-notes",
+          "title": "Disposition & Notes"
+        }
+      ],
+      "id": "omnichannel",
+      "section": "Contact Center"
+    },
+    {
+      "title": "Campaigns & Outbound Dialer",
+      "items": [
+        {
+          "id": "campaign-management",
+          "title": "Campaign Management"
+        },
+        {
+          "id": "contact-lists-groups",
+          "title": "Contact Lists & Groups"
+        },
+        {
+          "id": "campaign-scheduling",
+          "title": "Campaign Scheduling"
+        },
+        {
+          "id": "preview-dialer",
+          "title": "Preview Dialer"
+        },
+        {
+          "id": "progressive-dialer",
+          "title": "Progressive Dialer"
+        },
+        {
+          "id": "predictive-dialer",
+          "title": "Predictive Dialer"
+        },
+        {
+          "id": "voice-broadcast",
+          "title": "Voice Broadcast"
+        },
+        {
+          "id": "interactive-dtmf-campaigns",
+          "title": "Interactive DTMF Campaigns"
+        },
+        {
+          "id": "retry-redial-policies",
+          "title": "Retry & Redial Policies"
+        },
+        {
+          "id": "do-not-call-lists",
+          "title": "Do Not Call Lists"
+        },
+        {
+          "id": "answering-machine-detection",
+          "title": "Answering Machine Detection"
+        },
+        {
+          "id": "campaign-results",
+          "title": "Campaign Results"
+        },
+        {
+          "id": "dialer-capacity-controls",
+          "title": "Dialer Capacity Controls"
+        }
+      ],
+      "id": "campaigns",
+      "section": "Contact Center"
+    },
+    {
+      "title": "Reports & Analytics",
+      "items": [
+        {
+          "id": "call-detail-records",
+          "title": "Call Detail Records"
+        },
+        {
+          "id": "call-traffic-reports",
+          "title": "Call Traffic Reports"
+        },
+        {
+          "id": "inbound-outbound-reports",
+          "title": "Inbound / Outbound Reports"
+        },
+        {
+          "id": "queue-reports",
+          "title": "Queue Reports"
+        },
+        {
+          "id": "agent-reports",
+          "title": "Agent Reports"
+        },
+        {
+          "id": "supervisor-reports",
+          "title": "Supervisor Reports"
+        },
+        {
+          "id": "sla-reports",
+          "title": "SLA Reports"
+        },
+        {
+          "id": "abandoned-call-reports",
+          "title": "Abandoned Call Reports"
+        },
+        {
+          "id": "call-recording-reports",
+          "title": "Call Recording Reports"
+        },
+        {
+          "id": "ai-interaction-reports",
+          "title": "AI Interaction Reports"
+        },
+        {
+          "id": "ivr-reports",
+          "title": "IVR Reports"
+        },
+        {
+          "id": "trunk-reports",
+          "title": "Trunk Reports"
+        },
+        {
+          "id": "campaign-reports",
+          "title": "Campaign Reports"
+        },
+        {
+          "id": "quality-assurance-reports",
+          "title": "Quality Assurance Reports"
+        },
+        {
+          "id": "custom-report-builder",
+          "title": "Custom Report Builder"
+        },
+        {
+          "id": "scheduled-reports",
+          "title": "Scheduled Reports"
+        },
+        {
+          "id": "report-exports",
+          "title": "Report Exports"
+        }
+      ],
+      "id": "reports",
+      "section": "Analytics & Media"
+    },
+    {
+      "title": "Recordings & Media",
+      "items": [
+        {
+          "id": "call-recordings",
+          "title": "Call Recordings"
+        },
+        {
+          "id": "recording-search-playback",
+          "title": "Recording Search & Playback"
+        },
+        {
+          "id": "recording-policies",
+          "title": "Recording Policies"
+        },
+        {
+          "id": "recording-access-control",
+          "title": "Recording Access Control"
+        },
+        {
+          "id": "audio-library",
+          "title": "Audio Library"
+        },
+        {
+          "id": "ivr-prompts",
+          "title": "IVR Prompts"
+        },
+        {
+          "id": "announcements-library",
+          "title": "Announcements Library"
+        },
+        {
+          "id": "text-to-speech-audio",
+          "title": "Text-to-Speech Audio"
+        },
+        {
+          "id": "transcriptions",
+          "title": "Transcriptions"
+        },
+        {
+          "id": "recording-storage",
+          "title": "Recording Storage"
+        },
+        {
+          "id": "archiving-retention",
+          "title": "Archiving & Retention"
+        },
+        {
+          "id": "recording-exports",
+          "title": "Recording Exports"
+        }
+      ],
+      "id": "media",
+      "section": "Analytics & Media"
+    },
+    {
+      "title": "System & Infrastructure",
+      "items": [
+        {
+          "id": "server-overview",
+          "title": "Server Overview"
+        },
+        {
+          "id": "asterisk-engine-status",
+          "title": "Asterisk Engine Status"
+        },
+        {
+          "id": "cpu-ram-disk-monitoring",
+          "title": "CPU / RAM / Disk Monitoring"
+        },
+        {
+          "id": "network-monitoring",
+          "title": "Network Monitoring"
+        },
+        {
+          "id": "sip-registration-monitoring",
+          "title": "SIP Registration Monitoring"
+        },
+        {
+          "id": "trunk-health",
+          "title": "Trunk Health"
+        },
+        {
+          "id": "active-channels",
+          "title": "Active Channels"
+        },
+        {
+          "id": "ami-ari-connectivity",
+          "title": "AMI / ARI Connectivity"
+        },
+        {
+          "id": "pbx-cli",
+          "title": "PBX CLI"
+        },
+        {
+          "id": "log-file-viewer",
+          "title": "Log File Viewer"
+        },
+        {
+          "id": "cron-profiles",
+          "title": "Cron Profiles"
+        },
+        {
+          "id": "task-manager",
+          "title": "Task Manager"
+        },
+        {
+          "id": "service-management",
+          "title": "Service Management"
+        },
+        {
+          "id": "firewall-monitoring",
+          "title": "Firewall Monitoring"
+        },
+        {
+          "id": "intrusion-detection",
+          "title": "Intrusion Detection"
+        },
+        {
+          "id": "backup-restore",
+          "title": "Backup & Restore"
+        },
+        {
+          "id": "system-updates",
+          "title": "System Updates"
+        }
+      ],
+      "id": "infrastructure",
+      "section": "Operations & Security"
+    },
+    {
+      "title": "Security & Access Control",
+      "items": [
+        {
+          "id": "users",
+          "title": "Users",
+          "resource": "accounts"
+        },
+        {
+          "id": "roles-permissions",
+          "title": "Roles & Permissions",
+          "resource": "roles"
+        },
+        {
+          "id": "role-based-access-control",
+          "title": "Role-Based Access Control",
+          "resource": "roles"
+        },
+        {
+          "id": "multi-factor-authentication",
+          "title": "Multi-Factor Authentication",
+          "resource": "@security"
+        },
+        {
+          "id": "password-policies",
+          "title": "Password Policies"
+        },
+        {
+          "id": "weak-password-detection",
+          "title": "Weak Password Detection"
+        },
+        {
+          "id": "ip-allowlist-blocklist",
+          "title": "IP Allowlist / Blocklist"
+        },
+        {
+          "id": "call-blacklist",
+          "title": "Call Blacklist"
+        },
+        {
+          "id": "security-events",
+          "title": "Security Events"
+        },
+        {
+          "id": "audit-logs",
+          "title": "Audit Logs",
+          "resource": "audits"
+        },
+        {
+          "id": "session-management",
+          "title": "Session Management",
+          "resource": "accounts"
+        },
+        {
+          "id": "api-credentials",
+          "title": "API Credentials"
+        },
+        {
+          "id": "integration-secrets",
+          "title": "Integration Secrets"
+        },
+        {
+          "id": "data-retention-policies",
+          "title": "Data Retention Policies"
+        }
+      ],
+      "id": "security",
+      "section": "Operations & Security"
+    },
+    {
+      "title": "Emergency & Compliance",
+      "items": [
+        {
+          "id": "emergency-numbers",
+          "title": "Emergency Numbers"
+        },
+        {
+          "id": "dispatchable-locations",
+          "title": "Dispatchable Locations"
+        },
+        {
+          "id": "emergency-routing",
+          "title": "Emergency Routing"
+        },
+        {
+          "id": "emergency-call-logs",
+          "title": "Emergency Call Logs"
+        },
+        {
+          "id": "emergency-alerts",
+          "title": "Emergency Alerts"
+        },
+        {
+          "id": "call-recording-consent",
+          "title": "Call Recording Consent"
+        },
+        {
+          "id": "compliance-policies",
+          "title": "Compliance Policies"
+        },
+        {
+          "id": "privacy-data-protection",
+          "title": "Privacy & Data Protection"
+        },
+        {
+          "id": "do-not-call-compliance",
+          "title": "Do Not Call Compliance"
+        },
+        {
+          "id": "emergency-route-testing",
+          "title": "Emergency Route Testing"
+        }
+      ],
+      "id": "compliance",
+      "section": "Operations & Security"
+    },
+    {
+      "title": "Administration & Configuration",
+      "items": [
+        {
+          "id": "organisation-profile",
+          "title": "Organisation Profile",
+          "resource": "settings"
+        },
+        {
+          "id": "departments",
+          "title": "Departments",
+          "resource": "departments"
+        },
+        {
+          "id": "teams-locations",
+          "title": "Teams & Locations",
+          "resource": "sites"
+        },
+        {
+          "id": "tenant-client-management",
+          "title": "Tenant / Client Management"
+        },
+        {
+          "id": "business-hours",
+          "title": "Business Hours",
+          "resource": "business-hours"
+        },
+        {
+          "id": "system-preferences",
+          "title": "System Preferences",
+          "resource": "settings"
+        },
+        {
+          "id": "time-zones-languages",
+          "title": "Time Zones & Languages"
+        },
+        {
+          "id": "email-configuration",
+          "title": "Email Configuration"
+        },
+        {
+          "id": "sms-configuration",
+          "title": "SMS Configuration"
+        },
+        {
+          "id": "notification-templates",
+          "title": "Notification Templates"
+        },
+        {
+          "id": "api-webhooks",
+          "title": "API & Webhooks"
+        },
+        {
+          "id": "external-integrations",
+          "title": "External Integrations"
+        },
+        {
+          "id": "licensing-subscriptions",
+          "title": "Licensing & Subscriptions"
+        },
+        {
+          "id": "billing-usage",
+          "title": "Billing & Usage"
+        },
+        {
+          "id": "feature-flags",
+          "title": "Feature Flags"
+        },
+        {
+          "id": "configuration-history",
+          "title": "Configuration History",
+          "resource": "audits"
+        }
+      ],
+      "id": "administration",
+      "section": "Platform Administration"
+    },
+    {
+      "title": "Developer & Integration Tools",
+      "items": [
+        {
+          "id": "api-management",
+          "title": "API Management"
+        },
+        {
+          "id": "api-documentation",
+          "title": "API Documentation"
+        },
+        {
+          "id": "webhook-management",
+          "title": "Webhook Management"
+        },
+        {
+          "id": "ami-event-monitor",
+          "title": "AMI Event Monitor"
+        },
+        {
+          "id": "ari-application-manager",
+          "title": "ARI Application Manager"
+        },
+        {
+          "id": "dialplan-configuration",
+          "title": "Dialplan Configuration"
+        },
+        {
+          "id": "integration-connectors",
+          "title": "Integration Connectors"
+        },
+        {
+          "id": "event-logs",
+          "title": "Event Logs"
+        },
+        {
+          "id": "background-jobs",
+          "title": "Background Jobs",
+          "resource": "@horizon"
+        },
+        {
+          "id": "queue-workers",
+          "title": "Queue Workers",
+          "resource": "@horizon"
+        },
+        {
+          "id": "developer-sandbox",
+          "title": "Developer Sandbox"
+        },
+        {
+          "id": "test-call-simulator",
+          "title": "Test Call Simulator"
+        },
+        {
+          "id": "configuration-deployment",
+          "title": "Configuration Deployment"
+        }
+      ],
+      "id": "developer",
+      "section": "Platform Administration"
+    }
+  ],
+  "supervisor": [
+    {
+      "id": "dashboard",
+      "title": "Dashboard",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "team-overview",
+          "title": "Team Overview"
+        },
+        {
+          "id": "live-queue-status",
+          "title": "Live Queue Status"
+        },
+        {
+          "id": "sla-performance",
+          "title": "SLA Performance"
+        },
+        {
+          "id": "agent-availability",
+          "title": "Agent Availability"
+        }
+      ]
+    },
+    {
+      "id": "agent-management",
+      "title": "Agent Management",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "agent-status",
+          "title": "Agent Status"
+        },
+        {
+          "id": "breaks",
+          "title": "Breaks"
+        },
+        {
+          "id": "team-assignment",
+          "title": "Team Assignment"
+        },
+        {
+          "id": "skills",
+          "title": "Skills"
+        },
+        {
+          "id": "agent-activities",
+          "title": "Agent Activities"
+        }
+      ]
+    },
+    {
+      "id": "queue-operations",
+      "title": "Queue Operations",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "live-queues",
+          "title": "Live Queues"
+        },
+        {
+          "id": "waiting-calls",
+          "title": "Waiting Calls"
+        },
+        {
+          "id": "queue-priorities",
+          "title": "Queue Priorities"
+        },
+        {
+          "id": "queue-overflow",
+          "title": "Queue Overflow"
+        }
+      ]
+    },
+    {
+      "id": "live-call-monitoring",
+      "title": "Live Call Monitoring",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "listen",
+          "title": "Listen"
+        },
+        {
+          "id": "whisper",
+          "title": "Whisper"
+        },
+        {
+          "id": "barge-in",
+          "title": "Barge-in"
+        },
+        {
+          "id": "call-intervention",
+          "title": "Call Intervention"
+        }
+      ]
+    },
+    {
+      "id": "quality-assurance",
+      "title": "Quality Assurance",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "call-evaluations",
+          "title": "Call Evaluations"
+        },
+        {
+          "id": "scorecards",
+          "title": "Scorecards"
+        },
+        {
+          "id": "coaching",
+          "title": "Coaching"
+        },
+        {
+          "id": "ai-qa-reviews",
+          "title": "AI QA Reviews"
+        }
+      ]
+    },
+    {
+      "id": "recordings",
+      "title": "Recordings",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "team-recordings",
+          "title": "Team Recordings"
+        },
+        {
+          "id": "playback",
+          "title": "Playback"
+        },
+        {
+          "id": "transcripts",
+          "title": "Transcripts"
+        }
+      ]
+    },
+    {
+      "id": "reports",
+      "title": "Reports",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "agent-performance",
+          "title": "Agent Performance"
+        },
+        {
+          "id": "queue-performance",
+          "title": "Queue Performance"
+        },
+        {
+          "id": "sla",
+          "title": "SLA"
+        },
+        {
+          "id": "daily-summary",
+          "title": "Daily Summary"
+        }
+      ]
+    },
+    {
+      "id": "workforce-management",
+      "title": "Workforce Management",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "shifts",
+          "title": "Shifts"
+        },
+        {
+          "id": "schedules",
+          "title": "Schedules"
+        },
+        {
+          "id": "attendance",
+          "title": "Attendance"
+        },
+        {
+          "id": "break-planning",
+          "title": "Break Planning"
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "sla-alerts",
+          "title": "SLA Alerts"
+        },
+        {
+          "id": "missed-calls",
+          "title": "Missed Calls"
+        },
+        {
+          "id": "escalations",
+          "title": "Escalations"
+        }
+      ]
+    }
+  ],
+  "agent": [
+    {
+      "id": "my-dashboard",
+      "title": "My Dashboard",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "today-s-performance",
+          "title": "Today's Performance"
+        },
+        {
+          "id": "assigned-queues",
+          "title": "Assigned Queues"
+        },
+        {
+          "id": "personal-kpis",
+          "title": "Personal KPIs"
+        }
+      ]
+    },
+    {
+      "id": "agent-workspace",
+      "title": "Agent Workspace",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "webrtc-softphone",
+          "title": "WebRTC Softphone"
+        },
+        {
+          "id": "dialpad",
+          "title": "Dialpad"
+        },
+        {
+          "id": "incoming-calls",
+          "title": "Incoming Calls"
+        },
+        {
+          "id": "call-controls",
+          "title": "Call Controls"
+        }
+      ]
+    },
+    {
+      "id": "my-interactions",
+      "title": "My Interactions",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "active-interactions",
+          "title": "Active Interactions"
+        },
+        {
+          "id": "interaction-history",
+          "title": "Interaction History"
+        },
+        {
+          "id": "missed-calls",
+          "title": "Missed Calls"
+        }
+      ]
+    },
+    {
+      "id": "customers",
+      "title": "Customers",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "customer-search",
+          "title": "Customer Search"
+        },
+        {
+          "id": "customer-profile",
+          "title": "Customer Profile"
+        },
+        {
+          "id": "interaction-timeline",
+          "title": "Interaction Timeline"
+        }
+      ]
+    },
+    {
+      "id": "tickets-cases",
+      "title": "Tickets & Cases",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "my-tickets",
+          "title": "My Tickets"
+        },
+        {
+          "id": "new-ticket",
+          "title": "New Ticket"
+        },
+        {
+          "id": "escalations",
+          "title": "Escalations"
+        },
+        {
+          "id": "follow-ups",
+          "title": "Follow-Ups"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-base",
+      "title": "Knowledge Base",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "articles",
+          "title": "Articles"
+        },
+        {
+          "id": "faqs",
+          "title": "FAQs"
+        },
+        {
+          "id": "ai-assistance",
+          "title": "AI Assistance"
+        },
+        {
+          "id": "suggested-answers",
+          "title": "Suggested Answers"
+        }
+      ]
+    },
+    {
+      "id": "my-schedule",
+      "title": "My Schedule",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "shifts",
+          "title": "Shifts"
+        },
+        {
+          "id": "breaks",
+          "title": "Breaks"
+        },
+        {
+          "id": "availability",
+          "title": "Availability"
+        },
+        {
+          "id": "login-logout",
+          "title": "Login / Logout"
+        }
+      ]
+    },
+    {
+      "id": "my-performance",
+      "title": "My Performance",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "calls-handled",
+          "title": "Calls Handled"
+        },
+        {
+          "id": "talk-time",
+          "title": "Talk Time"
+        },
+        {
+          "id": "wrap-up-time",
+          "title": "Wrap-Up Time"
+        },
+        {
+          "id": "qa-scores",
+          "title": "QA Scores"
+        }
+      ]
+    },
+    {
+      "id": "notifications",
+      "title": "Notifications",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "call-alerts",
+          "title": "Call Alerts"
+        },
+        {
+          "id": "supervisor-messages",
+          "title": "Supervisor Messages"
+        },
+        {
+          "id": "assigned-tasks",
+          "title": "Assigned Tasks"
+        }
+      ]
+    },
+    {
+      "id": "profile-settings",
+      "title": "Profile & Settings",
+      "section": "Workspace",
+      "items": [
+        {
+          "id": "profile",
+          "title": "Profile"
+        },
+        {
+          "id": "audio-devices",
+          "title": "Audio Devices"
+        },
+        {
+          "id": "softphone-settings",
+          "title": "Softphone Settings"
+        },
+        {
+          "id": "password",
+          "title": "Password"
+        }
+      ]
+    }
+  ]
+}

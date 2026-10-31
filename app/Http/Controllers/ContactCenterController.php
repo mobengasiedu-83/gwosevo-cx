@@ -46,6 +46,13 @@ class ContactCenterController extends Controller
     public function index(Request $request, string $resource)
     {
         $query = $this->query($request, $resource);
+        if ($resource === 'extensions') {
+            if ($term = trim((string) $request->query('q'))) {
+                $query->where(fn ($match) => $match->where('number', 'like', "%{$term}%")->orWhere('name', 'like', "%{$term}%")->orWhere('user_device', 'like', "%{$term}%"));
+            }
+
+            return $query->orderBy('number')->paginate(50);
+        }
         if ($resource === 'agents') {
             $query->with('skills');
         } elseif ($resource === 'queues') {
@@ -80,7 +87,61 @@ class ContactCenterController extends Controller
         $rules += match ($resource) {
             'sites' => ['timezone' => ['required', 'timezone']],
             'teams' => ['department_id' => ['nullable', $exists('departments')]],
-            'extensions' => ['number' => ['required', 'string', 'regex:/^[0-9]{2,20}$/', $unique('number')]],
+            'extensions' => [
+                'number' => ['required', 'string', 'regex:/^[0-9]{2,20}$/', $unique('number')],
+                'class_of_service' => ['sometimes', Rule::in(array_keys(Extension::CLASSES_OF_SERVICE))],
+                'language' => ['sometimes', Rule::in(array_keys(Extension::LANGUAGES))],
+                'features_password' => ['nullable', 'string', 'max:64'],
+                'email_address' => ['nullable', 'email', 'max:255'],
+                'internal_cid_name' => ['nullable', 'string', 'max:60'],
+                'internal_cid_number' => ['nullable', 'string', 'max:32'],
+                'external_cid_name' => ['nullable', 'string', 'max:60'],
+                'external_cid_number' => ['nullable', 'string', 'max:32'],
+                'emergency_cid_name' => ['nullable', 'string', 'max:60'],
+                'emergency_cid_number' => ['nullable', 'string', 'max:32'],
+                'account_code' => ['nullable', 'string', 'max:32'],
+                'technology' => ['sometimes', Rule::in(array_keys(Extension::TECHNOLOGIES))],
+                'user_device' => ['nullable', 'string', 'max:50', 'regex:/^[A-Za-z0-9._-]+$/', Rule::unique('extensions', 'user_device')->where('tenant_id', $tenant)->ignore($record?->id)],
+                'device_password' => ['nullable', 'string', 'min:8', 'max:128'],
+                'device_description' => ['nullable', 'string', 'max:255'],
+                'profile' => ['nullable', 'string', 'max:100'],
+                'max_contacts' => ['sometimes', 'integer', 'between:1,100'],
+                'codecs' => ['nullable', 'string', 'max:255', 'regex:/^[A-Za-z0-9,._-]+$/'],
+                'dtmf_mode' => ['sometimes', Rule::in(array_keys(Extension::DTMF_MODES))],
+                'device_emergency_cid_name' => ['nullable', 'string', 'max:60'],
+                'device_emergency_cid_number' => ['nullable', 'string', 'max:32'],
+                'dispatchable_location' => ['nullable', 'string', 'max:255'],
+                'deny' => ['nullable', 'string', 'max:100', 'regex:/^[0-9a-fA-F.:\/(),\s]*$/'],
+                'permit' => ['nullable', 'string', 'max:100', 'regex:/^[0-9a-fA-F.:\/(),\s]*$/'],
+                'ring_device' => ['sometimes', 'boolean'],
+                'webrtc_client' => ['sometimes', 'boolean'],
+                'voicemail_enabled' => ['sometimes', 'boolean'],
+                'voicemail_mailbox' => ['nullable', 'string', 'regex:/^[0-9]{2,20}$/'],
+                'voicemail_password' => ['nullable', 'string', 'max:64'],
+                'voicemail_email' => ['nullable', 'email', 'max:255'],
+                'voicemail_options' => ['sometimes', 'array'],
+                'voicemail_options.*' => ['string', Rule::in(array_keys(Extension::VOICEMAIL_OPTIONS))],
+                'recording_mode' => ['sometimes', Rule::in(array_keys(Extension::RECORDING_MODES))],
+                'call_group' => ['nullable', 'string', 'max:50', 'regex:/^[0-9,\-\s]*$/'],
+                'pickup_group' => ['nullable', 'string', 'max:50', 'regex:/^[0-9,\-\s]*$/'],
+                'transport' => ['sometimes', Rule::in(array_keys(Extension::TRANSPORTS))],
+                'max_call_duration' => ['nullable', 'integer', 'between:1,1440'],
+                'call_waiting' => ['sometimes', 'boolean'],
+                'follow_me_enabled' => ['sometimes', 'boolean'],
+                'follow_me' => ['sometimes', 'array', 'max:10'],
+                'follow_me.*' => ['array:number,timeout'],
+                'follow_me.*.number' => ['required', 'string', 'regex:/^[0-9]{2,20}$/', 'distinct'],
+                'follow_me.*.timeout' => ['required', 'integer', 'between:5,120'],
+                'incoming_routes' => ['sometimes', 'array', 'max:20'],
+                'incoming_routes.*' => ['array:did,description'],
+                'incoming_routes.*.did' => ['required', 'string', 'regex:/^\+?[0-9]{3,20}$/', 'distinct'],
+                'incoming_routes.*.description' => ['nullable', 'string', 'max:255'],
+                'contact_company' => ['nullable', 'string', 'max:255'],
+                'contact_position' => ['nullable', 'string', 'max:255'],
+                'contact_phone' => ['nullable', 'string', 'max:32'],
+                'contact_mobile' => ['nullable', 'string', 'max:32'],
+                'contact_notes' => ['nullable', 'string', 'max:1000'],
+            ],
             'business-hours' => [
                 'timezone' => ['required', 'timezone'], 'schedule' => ['required', 'array', 'min:1', 'max:7'],
                 'schedule.*' => ['required', 'array:day,opens,closes'],
@@ -116,7 +177,13 @@ class ContactCenterController extends Controller
             ],
             default => [],
         };
+        if ($resource === 'extensions') {
+            $this->pruneExtensionRepeaters($request);
+        }
         $data = $request->validate($rules);
+        if ($resource === 'extensions') {
+            $data = $this->extensionSettings($data, $record);
+        }
         if (isset($data['site_id']) && ! Access::site($request->user(), $data['site_id'])) {
             throw ValidationException::withMessages(['site_id' => 'Choose an accessible site.']);
         }
@@ -173,6 +240,66 @@ class ContactCenterController extends Controller
         return $data;
     }
 
+    /**
+     * Drop empty repeater rows before validation so an operator can leave a
+     * blank follow me or DID row in the editor without a required error.
+     */
+    private function pruneExtensionRepeaters(Request $request): void
+    {
+        foreach (['follow_me' => 'number', 'incoming_routes' => 'did'] as $list => $key) {
+            $rows = $request->input($list);
+            if (! is_array($rows)) {
+                continue;
+            }
+            $request->merge([$list => array_values(array_filter(
+                $rows,
+                fn ($row) => is_array($row) && filled($row[$key] ?? null),
+            ))]);
+        }
+    }
+
+    /**
+     * Normalise endpoint settings before persistence. Blank secrets keep the
+     * stored value, blank option fields fall back to column defaults, and a
+     * selected device technology always carries an endpoint name and password.
+     */
+    private function extensionSettings(array $data, ?Extension $record): array
+    {
+        foreach (['class_of_service', 'language', 'technology', 'profile', 'dtmf_mode', 'transport', 'recording_mode'] as $field) {
+            if (array_key_exists($field, $data) && blank($data[$field])) {
+                unset($data[$field]);
+            }
+        }
+        foreach (['features_password', 'device_password', 'voicemail_password'] as $secret) {
+            if (array_key_exists($secret, $data) && blank($data[$secret])) {
+                unset($data[$secret]);
+            }
+        }
+        $technology = $data['technology'] ?? $record?->technology ?? 'none';
+        $device = array_key_exists('user_device', $data) ? $data['user_device'] : $record?->user_device;
+        if ($technology === 'none') {
+            // A virtual extension registers no endpoint device.
+            $data['user_device'] = null;
+        } elseif (blank($device)) {
+            // The device name follows the extension number until it is customised.
+            $data['user_device'] = $data['number'] ?? $record?->number;
+        } else {
+            $data['user_device'] = $device;
+        }
+        if ($technology !== 'none') {
+            if (blank($data['device_password'] ?? null) && ! $record?->has_device_password) {
+                throw ValidationException::withMessages(['device_password' => 'Set a password for the endpoint device.']);
+            }
+        }
+        foreach (['follow_me', 'incoming_routes'] as $list) {
+            if (array_key_exists($list, $data) && is_array($data[$list])) {
+                $data[$list] = array_values($data[$list]);
+            }
+        }
+
+        return $data;
+    }
+
     public function store(Request $request, string $resource)
     {
         $this->query($request, $resource);
@@ -183,6 +310,28 @@ class ContactCenterController extends Controller
     public function update(Request $request, string $resource, string $id)
     {
         return $this->save($request, $resource, $this->query($request, $resource)->findOrFail($id), 200);
+    }
+
+    /**
+     * Toggle a record between active and inactive without resubmitting the
+     * whole editor payload. Standardised across every domain resource so the
+     * list screens all expose the same Activate/Deactivate action.
+     */
+    public function status(Request $request, string $resource, string $id)
+    {
+        $data = $request->validate(['active' => ['required', 'boolean']]);
+        $record = $this->query($request, $resource)->findOrFail($id);
+
+        DB::transaction(function () use ($request, $resource, $record, $data) {
+            $before = $this->snapshot($record);
+            $record->update(['active' => $data['active']]);
+            $this->audit($request, $resource, $record->id, $data['active'] ? 'activate' : 'deactivate', [
+                'before' => $before,
+                'after' => $this->snapshot($record->fresh()),
+            ]);
+        });
+
+        return response()->json($this->snapshot($record->fresh()));
     }
 
     private function save(Request $request, string $resource, $record, int $status)

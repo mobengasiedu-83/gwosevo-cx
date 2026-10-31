@@ -92,6 +92,33 @@ class FoundationTest extends TestCase
         $this->getJson('/admin-api/sites')->assertUnauthorized();
     }
 
+    public function test_account_status_can_be_toggled_without_editing_the_profile(): void
+    {
+        $this->actingAs($admin = $this->admin());
+        $role = Role::findByName('Agent');
+        $data = ['name' => 'Shift Lead', 'email' => 'lead@example.test', 'password' => 'NewPassword123!', 'active' => true, 'restrict_site_access' => false, 'roles' => [$role->id], 'sites' => []];
+        $id = $this->postJson('/admin-api/accounts', $data)->assertCreated()->json('id');
+
+        $this->patchJson('/admin-api/accounts/'.$id.'/status', ['active' => false])
+            ->assertOk()
+            ->assertJsonPath('active', false)
+            ->assertJsonMissingPath('password');
+        $this->assertFalse(User::findOrFail($id)->active);
+        $this->assertDatabaseHas('audit_logs', ['resource' => 'users', 'resource_id' => $id, 'action' => 'deactivate']);
+
+        $this->patchJson('/admin-api/accounts/'.$id.'/status', ['active' => true])
+            ->assertOk()
+            ->assertJsonPath('active', true);
+        $this->assertTrue(User::findOrFail($id)->active);
+        $this->assertDatabaseHas('audit_logs', ['resource' => 'users', 'resource_id' => $id, 'action' => 'activate']);
+
+        // The account cannot lock itself out, and role checks still apply.
+        $this->patchJson('/admin-api/accounts/'.$admin->id.'/status', ['active' => false])->assertUnprocessable();
+        $this->actingAs(User::factory()->create(['tenant_id' => $admin->tenant_id]))->withSession(['auth_version' => 1])
+            ->patchJson('/admin-api/accounts/'.$id.'/status', ['active' => false])
+            ->assertForbidden();
+    }
+
     public function test_site_scoping_and_role_escalation_protection(): void
     {
         $this->actingAs($admin = $this->admin());

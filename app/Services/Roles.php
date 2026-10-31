@@ -12,7 +12,7 @@ class Roles
 
     public static function permissions(): array
     {
-        $permissions = ['contact-center.view', 'contact-center.manage', 'users.view', 'users.manage', 'roles.view', 'roles.manage', 'settings.view', 'settings.update', 'audit-logs.view'];
+        $permissions = ['portal.admin', 'portal.supervisor', 'portal.agent', 'contact-center.view', 'contact-center.manage', 'users.view', 'users.manage', 'roles.view', 'roles.manage', 'settings.view', 'settings.update', 'audit-logs.view'];
         foreach (array_keys(ContactCenterController::RESOURCES) as $resource) {
             foreach (['view', 'create', 'update', 'delete'] as $verb) {
                 $permissions[] = "$resource.$verb";
@@ -31,6 +31,9 @@ class Roles
             $role = Role::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
             if (in_array($name, ['Super Admin', 'Administrator']) || $role->wasRecentlyCreated) {
                 $role->syncPermissions(in_array($name, ['Super Admin', 'Administrator']) ? self::permissions() : array_values(array_filter(self::permissions(), fn ($p) => str_ends_with($p, '.view') && ! in_array($p, ['users.view', 'roles.view', 'audit-logs.view']))));
+            }
+            if (in_array($name, ['Agent', 'Supervisor', 'Team Lead'])) {
+                $role->syncPermissions([$name === 'Agent' ? 'portal.agent' : 'portal.supervisor']);
             }
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Navigation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -13,6 +14,8 @@ class HandleInertiaRequests extends Middleware
     {
         return [...parent::share($request),
             'baseUrl' => url('/'),
+            'home' => fn () => $request->user() ? Navigation::homeFor($request->user()) : null,
+            'portals' => fn () => $request->user() ? Navigation::portals($request->user()) : [],
             'mfaAvailable' => (bool) config('fortify.mfa_enabled'),
             'auth' => fn () => $request->user() ? [
                 'name' => $request->user()->name, 'email' => $request->user()->email,

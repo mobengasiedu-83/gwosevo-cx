@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureActiveSession;
+use App\Http\Middleware\EnsureEnabledModule;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RequireMfa;
 use Illuminate\Foundation\Application;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             EnsureActiveSession::class,
             HandleInertiaRequests::class,
+            EnsureEnabledModule::class,
         ]);
         $middleware->alias(['mfa' => RequireMfa::class]);
     })

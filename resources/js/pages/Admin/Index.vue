@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from "vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, router, usePage } from "@inertiajs/vue3";
+import NavigationPanel from "../../components/NavigationPanel.vue";
+import type { NavigationGroup } from "../../types";
 import AppLayout from "../../components/AppLayout.vue";
+import PageHeader from "../../components/PageHeader.vue";
+import PaginationBar from "../../components/PaginationBar.vue";
+import StatusPill from "../../components/StatusPill.vue";
+import FieldLabel from "../../components/FieldLabel.vue";
 import { useApi } from "../../composables/api";
 import { schema, defaults, label } from "../../schema";
 import type { SharedProps, RecordItem } from "../../types";
+const props = defineProps<{
+    navigation: NavigationGroup[];
+    selectedModule: string;
+}>();
 const page = usePage<SharedProps>(),
-    { request, message } = useApi();
+    { request, message, url } = useApi();
 const can = (p: string) => page.props.auth?.permissions.includes(p) ?? false;
-const module = ref("sites"),
+const module = ref(props.selectedModule),
     rows = ref<RecordItem[]>([]),
     currentPage = ref(1),
     lastPage = ref(1),
@@ -23,8 +33,12 @@ const form = ref<Record<string, any>>({}),
     permissions = ref<string[]>([]);
 let generation = 0;
 const modules = computed(() => [
+    // Extensions render through their own tabbed editor, so the generic record
+    // table skips them while still exposing the relation for agent pickers.
     ...Object.keys(schema).filter(
-        (r) => can("contact-center.view") || can(r + ".view"),
+        (r) =>
+            r !== "extensions" &&
+            (can("contact-center.view") || can(r + ".view")),
     ),
     ...(can("users.view") ? ["accounts"] : []),
     ...(can("roles.view") ? ["roles"] : []),
@@ -71,10 +85,17 @@ const fields = computed(() =>
 );
 const relation = (spec: any) =>
     typeof spec === "string" ? spec.replace("?", "") : "";
+// A two-option "true"/"false" array is a boolean flag. Those render as the
+// same segmented Yes/No control the extension editor uses, instead of a
+// dropdown that reads "True"/"False".
+const isBoolean = (spec: any) =>
+    Array.isArray(spec) &&
+    spec.every((option) => option === "true" || option === "false");
 const isSelect = (spec: any) =>
-    Array.isArray(spec) ||
-    relation(spec) in schema ||
-    relation(spec) === "users";
+    !isBoolean(spec) &&
+    (Array.isArray(spec) ||
+        relation(spec) in schema ||
+        relation(spec) === "users");
 function options(spec: any): RecordItem[] {
     const type = relation(spec);
     let items = choices.value[type] || [];
@@ -130,17 +151,43 @@ async function load() {
         if (version === generation) busy.value = false;
     }
 }
+// PaginationBar is presentation only: it reports the requested page and the
+// page owns the request, so every list pages the same way.
+function goto(page: number) {
+    currentPage.value = page;
+    load();
+}
 watch(module, () => {
     currentPage.value = 1;
     editor.value = false;
     status.value = "";
     load();
 });
+// Inertia reuses this component for /admin?module=… visits (for example
+// history navigation), so keep the local module in sync with the server prop.
+watch(
+    () => props.selectedModule,
+    (value) => {
+        if (value && value !== module.value) module.value = value;
+    },
+);
 onMounted(() => {
     if (!modules.value.includes(module.value))
         module.value = modules.value[0] || "sites";
     else load();
 });
+// Switching modules stays client side, except for extensions which need the
+// dedicated editor page rendered by the server route. The URL must come from
+// the shared base so the visit still resolves when the app is mounted in a
+// sub-directory; a root-relative "/admin" would escape it and 404 at the
+// web server before Laravel ever sees the request.
+function select(resource: string) {
+    if (resource === "extensions") {
+        router.get(url("admin"), { module: resource });
+        return;
+    }
+    module.value = resource;
+}
 async function open(row?: RecordItem) {
     status.value = "";
     busy.value = true;
@@ -297,55 +344,42 @@ const json = (value: any) => {
 <template>
     <Head :title="label(module)" /><AppLayout
         ><div class="workspace">
-            <aside class="sidebar">
-                <p class="eyebrow">ADMINISTRATION</p>
-                <button
-                    v-for="item in modules"
-                    :key="item"
-                    :class="{ selected: module === item }"
-                    @click="module = item"
-                >
-                    {{ item === "accounts" ? "Users" : label(item) }}
-                </button>
-                <div class="sidebar-note">
-                    Foundation &amp; configuration<br /><small
-                        >GWO SEVO Contact Center</small
-                    >
-                </div>
-            </aside>
+            <NavigationPanel
+                :groups="navigation"
+                portal="admin"
+                :selected="module"
+                local
+                @select="select"
+            />
             <div class="content">
-                <div class="page-heading">
-                    <div>
-                        <p class="eyebrow">CONTACT CENTER / ADMINISTRATION</p>
-                        <h1>
-                            {{
-                                module === "accounts" ? "Users" : label(module)
-                            }}
-                        </h1>
-                        <p class="muted">
-                            {{
-                                schema[module]?.description ||
-                                (module === "audits"
-                                    ? "Review configuration and account activity."
-                                    : module === "settings"
-                                      ? "Manage your tenant defaults."
-                                      : "Manage access within your organization.")
-                            }}
-                        </p>
-                    </div>
-                    <button
-                        v-if="
-                            module !== 'settings' &&
-                            module !== 'audits' &&
-                            editable
-                        "
-                        class="primary"
-                        :disabled="busy"
-                        @click="open()"
-                    >
-                        + Create {{ module === "accounts" ? "user" : "record" }}
-                    </button>
-                </div>
+                <PageHeader
+                    eyebrow="CONTACT CENTER / ADMINISTRATION"
+                    :title="module === 'accounts' ? 'Users' : label(module)"
+                    :description="
+                        schema[module]?.description ||
+                        (module === 'audits'
+                            ? 'Review configuration and account activity.'
+                            : module === 'settings'
+                              ? 'Manage your tenant defaults.'
+                              : 'Manage access within your organization.')
+                    "
+                >
+                    <template #actions>
+                        <button
+                            v-if="
+                                module !== 'settings' &&
+                                module !== 'audits' &&
+                                editable
+                            "
+                            class="primary"
+                            :disabled="busy"
+                            @click="open()"
+                        >
+                            + Create
+                            {{ module === "accounts" ? "user" : "record" }}
+                        </button>
+                    </template>
+                </PageHeader>
                 <p v-if="status" class="notice" role="status">{{ status }}</p>
                 <section v-if="module !== 'settings'" class="panel">
                     <div class="table-heading">
@@ -395,17 +429,9 @@ const json = (value: any) => {
                                         {{ row.email }}
                                     </td>
                                     <td v-else>
-                                        <span
-                                            class="badge"
-                                            :class="{
-                                                inactive: row.active === false,
-                                            }"
-                                            >{{
-                                                row.active === false
-                                                    ? "Inactive"
-                                                    : "Active"
-                                            }}</span
-                                        >
+                                        <StatusPill
+                                            :active="row.active !== false"
+                                        />
                                     </td>
                                     <td>
                                         <span v-if="module === 'audits'"
@@ -424,8 +450,8 @@ const json = (value: any) => {
                                             <summary>View changes</summary>
                                             <pre>{{ json(row.changes) }}</pre>
                                         </details>
-                                        <template v-else
-                                            ><button
+                                        <div v-else class="row-actions">
+                                            <button
                                                 v-if="
                                                     (editable ||
                                                         can(
@@ -434,37 +460,44 @@ const json = (value: any) => {
                                                     (module !== 'roles' ||
                                                         row.tenant_id)
                                                 "
+                                                class="btn-sm"
                                                 @click="open(row)"
                                             >
-                                                Edit</button
-                                            ><button
+                                                Edit
+                                            </button>
+                                            <button
                                                 v-if="
                                                     module in schema &&
                                                     (can(
                                                         'contact-center.manage',
                                                     ) ||
-                                                        can(module + '.delete'))
+                                                        can(
+                                                            module + '.delete',
+                                                        ))
                                                 "
-                                                class="danger"
+                                                class="btn-sm danger"
                                                 @click="remove(row)"
                                             >
-                                                Delete</button
-                                            ><button
+                                                Delete
+                                            </button>
+                                            <button
                                                 v-if="
                                                     module === 'accounts' &&
                                                     can('users.manage')
                                                 "
+                                                class="btn-sm"
                                                 @click="revoke(row)"
                                             >
-                                                Revoke sessions</button
-                                            ><small
+                                                Revoke sessions
+                                            </button>
+                                            <small
                                                 v-if="
                                                     module === 'roles' &&
                                                     !row.tenant_id
                                                 "
                                                 >Built-in role</small
-                                            ></template
-                                        >
+                                            >
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr v-if="!rows.length && !busy">
@@ -476,26 +509,12 @@ const json = (value: any) => {
                             </tbody>
                         </table>
                     </div>
-                    <div class="pagination">
-                        <button
-                            :disabled="currentPage === 1 || busy"
-                            @click="
-                                currentPage--;
-                                load();
-                            "
-                        >
-                            Previous</button
-                        ><small>Page {{ currentPage }} of {{ lastPage }}</small
-                        ><button
-                            :disabled="currentPage >= lastPage || busy"
-                            @click="
-                                currentPage++;
-                                load();
-                            "
-                        >
-                            Next
-                        </button>
-                    </div>
+                    <PaginationBar
+                        :page="currentPage"
+                        :last-page="lastPage"
+                        :busy="busy"
+                        @change="goto"
+                    />
                 </section>
                 <section v-if="editor" class="panel editor">
                     <div class="table-heading">
@@ -509,6 +528,7 @@ const json = (value: any) => {
                         </h2>
                         <button
                             v-if="module !== 'settings'"
+                            class="ghost btn-sm"
                             @click="editor = false"
                         >
                             Close
@@ -533,12 +553,36 @@ const json = (value: any) => {
                                     ].includes(relation(spec)),
                                 }"
                             >
-                                <label :for="'field-' + key">{{
-                                    label(key)
-                                }}</label
-                                ><select
+                                <FieldLabel
+                                    :for="'field-' + key"
+                                    :label="label(key)"
+                                    :required="
+                                        !isBoolean(spec) &&
+                                        !String(spec).endsWith('?')
+                                    "
+                                />
+                                <div
+                                    v-if="isBoolean(spec)"
                                     :id="'field-' + key"
-                                    v-if="isSelect(spec)"
+                                    class="segmented"
+                                    role="group"
+                                    :aria-label="label(key)"
+                                >
+                                    <button
+                                        v-for="option in spec"
+                                        :key="option"
+                                        type="button"
+                                        :aria-pressed="
+                                            String(form[key]) === option
+                                        "
+                                        @click="form[key] = option"
+                                    >
+                                        {{ option === "true" ? "Yes" : "No" }}
+                                    </button>
+                                </div>
+                                <select
+                                    :id="'field-' + key"
+                                    v-else-if="isSelect(spec)"
                                     v-model="form[key]"
                                     :required="!String(spec).endsWith('?')"
                                 >
@@ -746,13 +790,18 @@ const json = (value: any) => {
                                 >
                             </div>
                         </div>
-                        <button
-                            v-if="editable"
-                            class="primary"
-                            :disabled="busy"
-                        >
-                            Save configuration
-                        </button>
+                        <div v-if="editable" class="form-actions">
+                            <button class="primary" :disabled="busy">
+                                Save configuration
+                            </button>
+                            <button
+                                v-if="module !== 'settings'"
+                                type="button"
+                                @click="editor = false"
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </form>
                 </section>
             </div>

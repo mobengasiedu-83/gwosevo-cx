@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { Head, useForm } from "@inertiajs/vue3";
+import AuthShell from "../../components/AuthShell.vue";
+import Icon from "../../components/Icon.vue";
+import FieldLabel from "../../components/FieldLabel.vue";
 import { useApi } from "../../composables/api";
 const recovery = ref(false),
     form = useForm({ code: "", recovery_code: "" });
@@ -13,9 +16,12 @@ function submit() {
 </script>
 <template>
     <Head title="Verify sign in" />
-    <div class="auth-shell">
-        <form class="panel auth-card" @submit.prevent="submit">
-            <p class="eyebrow">ACCOUNT SECURITY</p>
+    <AuthShell>
+        <header class="auth-card-head">
+            <span class="auth-badge">
+                <Icon name="key" :size="13" />
+                ACCOUNT SECURITY
+            </span>
             <h1>Verify your sign in</h1>
             <p class="muted">
                 {{
@@ -24,26 +30,53 @@ function submit() {
                         : "Enter the current six-digit code from your authenticator app."
                 }}
             </p>
+        </header>
+        <form class="auth-form" @submit.prevent="submit">
             <p v-for="error in form.errors" :key="error" class="error">
                 {{ error }}
             </p>
-            <label v-if="!recovery"
-                >Authentication code<input
+            <div v-if="!recovery" class="field">
+                <FieldLabel
+                    for="two-factor-code"
+                    label="Authentication code"
+                    required
+                />
+                <input
+                    id="two-factor-code"
                     v-model="form.code"
                     inputmode="numeric"
                     autocomplete="one-time-code"
                     pattern="[0-9]{6}"
+                    placeholder="000000"
+                    class="code-input"
                     required
-                    autofocus /></label
-            ><label v-else
-                >Recovery code<input
+                    autofocus
+                />
+            </div>
+            <div v-else class="field">
+                <FieldLabel
+                    for="two-factor-recovery"
+                    label="Recovery code"
+                    required
+                />
+                <input
+                    id="two-factor-recovery"
                     v-model="form.recovery_code"
                     autocomplete="off"
-                    required /></label
-            ><button class="primary" :disabled="form.processing">Verify</button
-            ><button type="button" @click="recovery = !recovery">
-                {{ recovery ? "Use authenticator" : "Use recovery code" }}
-            </button>
+                    placeholder="xxxxxxxx"
+                    required
+                />
+            </div>
+            <div class="form-actions">
+                <button class="primary" :disabled="form.processing">
+                    Verify
+                </button>
+                <button type="button" @click="recovery = !recovery">
+                    <Icon name="refresh" :size="15" />
+                    {{ recovery ? "Use authenticator" : "Use recovery code" }}
+                </button>
+            </div>
         </form>
-    </div>
+    </AuthShell>
 </template>
+

@@ -20,3 +20,8 @@ $user->tenant_id = $tenant->id;
 $user->save();
 $user->assignRole('Super Admin');
 echo "Isolated browser fixtures prepared.\n";
+
+$agent = new User(['name' => 'Browser Agent', 'email' => 'agent@example.test', 'password' => 'BrowserTest12345!']);
+$agent->tenant_id = $tenant->id;
+$agent->save();
+$agent->assignRole('Agent');

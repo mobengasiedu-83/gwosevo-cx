@@ -1,6 +1,6 @@
 # GWO SEVO Contact Center
 
-Laravel 12 + Vue 3 + TypeScript + Inertia contact center application. Phases 1 and 2 provide authentication, administration and the configurable contact center domain. See the [implementation review](docs/IMPLEMENTATION_REVIEW.md) for scope and verification boundaries.
+Laravel 12 + Vue 3 + TypeScript + Inertia contact center application. Phases 1 and 2 provide authentication, administration and the configurable contact center domain. See the [implementation review](docs/IMPLEMENTATION_REVIEW.md) for scope and verification boundaries, the [feature coverage](docs/FEATURE_COVERAGE.md) for the requested capability set and delivery gates, and the [VitalPBX parity review](docs/VITALPBX_PARITY_REVIEW.md) for an item-by-item comparison against the February 2025 VitalPBX feature list.
 
 ## Local development
 
@@ -19,7 +19,7 @@ php artisan contact-center:check-infrastructure
 composer run dev
 ```
 
-For an existing installation, preserve `.env` and APP_KEY. Never regenerate the key on an installation holding encrypted MFA secrets. Use a host rooted at `public`, or the configured ServBay subdirectory URL. The portal is at `/login`, with administration at `/admin` and account security at `/security`.
+For an existing installation, preserve `.env` and APP_KEY. Run `php artisan migrate` after every update: screens that read new columns fail with a `SQLSTATE[42S22] Unknown column` error until the schema catches up with the code. Rebuild the front-end bundle (`npm ci && npm run build`) whenever `resources/js` changes, since the browser loads the compiled assets from `public/build`. Never regenerate the key on an installation holding encrypted MFA secrets. Use a host rooted at `public`, or the configured ServBay subdirectory URL. The portal is at `/login`, with administration at `/admin` and account security at `/security`.
 
 `composer run dev` runs Laravel, Horizon, logs and Vite. Redis backs sessions, cache and jobs. Use a production process manager for Horizon rather than a development terminal. Reverb is installed for later real-time features and is not yet needed for configuration screens.
 
@@ -80,3 +80,9 @@ The GitHub Actions workflow validates PHP, Vue, MySQL migrations and Redis. It h
 Local MFA is currently disabled with `MFA_ENABLED=false` in the ignored `.env`. This disables enrollment enforcement and sign-in challenges, including for already-enrolled accounts. Existing encrypted MFA secrets and recovery codes remain in the database.
 
 To restore MFA, set `MFA_ENABLED=true` in `.env`, run `php artisan config:clear`, and restart any long-running application processes. New requests then require enrollment for privileged accounts and challenge enrolled accounts on their next login. The committed `.env.example` defaults to enabled; automated tests explicitly exercise the enabled configuration and the disabled switch. The earlier MFA enrollment descriptions above apply when enabled.
+
+## Portal navigation
+
+The administration directory contains six sections, 17 menus and 237 entries from the supplied specification. Agent (`/agent`) and Supervisor (`/supervisor`) workspaces have separate navigation and role checks. Login, MFA completion and the header brand send users to their first assigned workspace. Search finds menu features and, for administration, also looks up implemented records (sites, teams, extensions, agents, queues and so on) within the account's tenant, site scope and permissions. Working entries open existing screens; future features display an explicit planned status.
+
+The catalogue is maintained in `resources/navigation.json`. Disable groups with a comma-separated `DISABLED_MODULES` value in `.env` and run `php artisan config:clear`. Group IDs are `dashboards`, `extensions`, `routing`, `ivr`, `contact-center`, `ai`, `applications`, `policies`, `omnichannel`, `campaigns`, `reports`, `media`, `infrastructure`, `security`, `compliance`, `administration` and `developer`. Disabled implemented resources are blocked in the API as well as hidden in the menu. Run `php artisan contact-center:sync-roles` after deploying the new portal permissions. This updates the shared Agent and Supervisor role templates to their dedicated portal access.

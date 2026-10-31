@@ -19,9 +19,12 @@ export const schema: Record<
         description: "Define the skills your contact center needs.",
         fields: {},
     },
+    // Kept in the schema so relation pickers (for example `extension_id` on
+    // agents) can resolve extension choices; the screen itself is rendered by
+    // Admin/Extensions.vue through the extensions branch of the admin route.
     extensions: {
         description:
-            "Assign unique extension numbers. PBX provisioning follows in Phase 5.",
+            "Provision SIP endpoints with voicemail, recording and routing.",
         fields: { site_id: "sites", number: "text" },
     },
     "business-hours": {

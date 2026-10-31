@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\User;
 use App\Services\Audit;
+use App\Services\Navigation;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
@@ -59,6 +60,6 @@ class AppServiceProvider extends ServiceProvider
                 Audit::record($event->user, class_basename($event), 'authentication', (string) $event->user->id);
             });
         }
-        Horizon::auth(fn ($request) => $request->user()?->hasRole('Super Admin') && (! config('fortify.mfa_enabled') || $request->user()?->two_factor_confirmed_at));
+        Horizon::auth(fn ($request) => Navigation::resourceEnabled('@horizon') && $request->user()?->hasRole('Super Admin') && (! config('fortify.mfa_enabled') || $request->user()?->two_factor_confirmed_at));
     }
 }
